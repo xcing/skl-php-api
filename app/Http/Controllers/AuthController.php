@@ -31,7 +31,6 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
-        return $user;
         $user->save();
         return response()->json([
             'message' => 'Successfully created user!'
