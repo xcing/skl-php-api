@@ -37,9 +37,16 @@ Route::group([
     'prefix' => 'course',
 ], function () {
     Route::get('{courseId}', 'CourseController@view');
-    Route::post('', 'CourseController@viewList');//add filter
+    Route::post('', 'CourseController@viewList');
     Route::post('me', 'CourseController@myList');
     Route::post('create', 'CourseController@create');
     Route::put('update', 'CourseController@update');
 });
 
+Route::group([
+    'namespace' => 'API',
+    'middleware' => ['api', 'auth:api'],
+    'prefix' => 'category',
+], function () {
+    Route::get('', 'CategoryController@viewList');
+});
