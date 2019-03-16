@@ -19,7 +19,41 @@ class CourseController extends Controller
 
     public function viewList(Request $request)
     {
-        $course = Course::with(['category', 'instructor'])->get();
+        $validator = Validator::make($request->all(), [
+            'name' => 'string',
+            'category_id' => 'integer',
+            'start_time' => 'date_format:"Y-m-d H:i:s"',
+            'end_time' => 'date_format:"Y-m-d H:i:s"',
+            'insructor_user_id' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->messages(),
+            ], 400);
+        }
+        $input = $request->input();
+
+        $queryArray = $this->createQueryArray($input);
+
+        $name = '';
+        if(isset($input['name'])){
+            $name = $input['name'];
+        }
+        $startTime = '1970-01-01 00:00:01';
+        if(isset($input['start_time'])){
+            $startTime = $input['start_time'];
+        }
+        $endTime = '3070-01-01 00:00:01';
+        if(isset($input['end_time'])){
+            $endTime = $input['end_time'];
+        }
+
+        $course = Course::with(['category', 'instructor'])
+        ->where($queryArray)
+        ->where('name', 'like', '%' . $name . '%')
+        ->where('start_time', '>=', $startTime)
+        ->where('end_time', '<=', $endTime)
+        ->get();
 
         return response()->json([
             'data' => $course,
@@ -116,5 +150,18 @@ class CourseController extends Controller
         return response()->json([
             'data' => $course,
         ], 200);
+    }
+
+    public function createQueryArray($input)
+    {
+        $queryArray = array();
+        if (isset($input['category_id'])) {
+            $queryArray = array_merge($queryArray, ['category_id' => $input['category_id']]);
+        }
+        if (isset($input['instructor_user_id'])) {
+            $queryArray = array_merge($queryArray, ['instructor_user_id' => $input['instructor_user_id']]);
+        }
+
+        return $queryArray;
     }
 }
