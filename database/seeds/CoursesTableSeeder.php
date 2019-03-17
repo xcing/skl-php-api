@@ -47,6 +47,18 @@ class CoursesTableSeeder extends Seeder
                 'instructor_user_id' => 3,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'รัฐธรรมนูญ',
+                'description' => 'รัฐธรรมนูญฉบับปี 2560',
+                'category_id' => 3,
+                'subject' => 'รัฐธรรมนูญ',
+                'start_time' => '2019-07-05 13:00:00',
+                'end_time' => '2020-01-05 17:00:00',
+                'number_of_student' => 10,
+                'instructor_user_id' => 3,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]
         ]);
     }

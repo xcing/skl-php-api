@@ -20,8 +20,8 @@ class CourseController extends Controller
     public function viewList(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'string',
-            'category_id' => 'integer',
+            // 'name' => 'string',
+            // 'category_id' => 'integer',
             'start_time' => 'date_format:"Y-m-d H:i:s"',
             'end_time' => 'date_format:"Y-m-d H:i:s"',
             'insructor_user_id' => 'integer',
@@ -36,21 +36,21 @@ class CourseController extends Controller
         $queryArray = $this->createQueryArray($input);
 
         $name = '';
-        if(isset($input['name'])){
+        if(isset($input['name']) && $input['name'] != ""){
             $name = $input['name'];
         }
         $startTime = '1970-01-01 00:00:01';
-        if(isset($input['start_time'])){
+        if(isset($input['start_time']) && $input['start_time'] != ""){
             $startTime = $input['start_time'];
         }
-        $endTime = '3070-01-01 00:00:01';
-        if(isset($input['end_time'])){
+        $endTime = '9999-12-31 00:00:01';
+        if(isset($input['end_time']) && $input['end_time'] != ""){
             $endTime = $input['end_time'];
         }
 
         $course = Course::with(['category', 'instructor'])
         ->where($queryArray)
-        ->where('name', 'like', '%' . $name . '%')
+        ->where('subject', 'like', '%' . $name . '%')
         ->where('start_time', '>=', $startTime)
         ->where('end_time', '<=', $endTime)
         ->get();
@@ -155,10 +155,10 @@ class CourseController extends Controller
     public function createQueryArray($input)
     {
         $queryArray = array();
-        if (isset($input['category_id'])) {
+        if (isset($input['category_id']) && $input['category_id'] != "") {
             $queryArray = array_merge($queryArray, ['category_id' => $input['category_id']]);
         }
-        if (isset($input['instructor_user_id'])) {
+        if (isset($input['instructor_user_id']) && $input['instructor_user_id'] != "") {
             $queryArray = array_merge($queryArray, ['instructor_user_id' => $input['instructor_user_id']]);
         }
 
